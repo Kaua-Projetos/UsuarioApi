@@ -1,0 +1,12 @@
+com\example\dto\UsuarioDTO.class
+com\example\repository\LivroRepository.class
+com\example\configuration\SecurityConfig.class
+com\example\configuration\BancoConfig.class
+com\example\controller\UsuarioController.class
+com\example\controller\LivroController.class
+com\example\model\Livro.class
+com\example\GerenciadorTarefaApplication.class
+com\example\configuration\WebConfig.class
+com\example\model\Usuario.class
+com\example\service\UsuarioService.class
+com\example\repository\UsuarioRepository.class

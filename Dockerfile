@@ -1,5 +1,5 @@
 # Estágio de build
-FROM maven:3.9-eclipse-temurin-21-alpine AS build
+FROM maven:3.9-eclipse-temurin-21 AS build
 
 # Defina o diretório de trabalho
 WORKDIR /app
@@ -18,10 +18,10 @@ RUN chmod +x ./mvnw
 COPY src ./src
 
 # Execute o build com Maven, pulando os testes
-RUN ./mvnw -B -DskipTests clean package
+RUN ./mvnw clean package -DskipTests
 
 # Estágio de execução
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
@@ -31,6 +31,6 @@ COPY --from=build /app/target/Gerenciador-de-Tarefas-0.0.1-SNAPSHOT.jar app.jar
 # Exponha a porta da aplicação
 EXPOSE 8080
 
-# Defina o comando para executar a aplicação
-CMD ["java", "-jar", "app.jar"]
+# Defina o comando para executar a aplicação com o perfil de produção
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar"]
 

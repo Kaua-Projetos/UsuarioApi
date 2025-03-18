@@ -1,52 +1,74 @@
-# Deploy da API no Railway
+# Guia de Deploy no Railway
 
-Este guia explica como fazer o deploy da aplicação no Railway.
+Este guia atualizado contém instruções para fazer o deploy da aplicação no Railway e resolver problemas de conexão com o banco de dados.
 
-## Passos para deploy
+## Preparação para Deploy
 
-1. **Crie uma conta no Railway**
-   - Acesse [Railway](https://railway.app/) e crie uma conta
+1. **Verifique se os arquivos estão atualizados**:
+   - `Dockerfile` - Configurado para usar o perfil de produção
+   - `application-prod.yml` - Configurações específicas para produção
+   - `.env.railway` - Variáveis de ambiente para o Railway
+   - `railway.json` - Configuração do deploy
 
-2. **Crie um novo projeto**
-   - Selecione "New Project" no dashboard
-   - Escolha "Deploy from GitHub repo"
-   - Conecte seu repositório GitHub
+2. **Faça commit e push para seu repositório GitHub**
 
-3. **Configure as variáveis de ambiente**
-   - Na seção "Variables", adicione as seguintes variáveis:
-     ```
-     SPRING_DATASOURCE_URL=jdbc:postgresql://${RAILWAY_INTERNAL_HOST}:${RAILWAY_INTERNAL_PORT}/${RAILWAY_DATABASE_NAME}
-     SPRING_DATASOURCE_USERNAME=${RAILWAY_DATABASE_USERNAME}
-     SPRING_DATASOURCE_PASSWORD=${RAILWAY_DATABASE_PASSWORD}
-     SPRING_JPA_HIBERNATE_DDL_AUTO=update
-     ```
+## Deploy no Railway
 
-4. **Adicione um banco de dados PostgreSQL**
-   - Vá para "New" e selecione "Database" -> "PostgreSQL"
-   - O Railway irá provisionar automaticamente uma instância PostgreSQL
-   - As variáveis de ambiente para conexão serão automaticamente configuradas
+### Passo 1: Criar projeto e banco de dados
 
-5. **Deploy**
-   - O Railway detectará automaticamente o Dockerfile e fará o build e deploy
-   - Você pode acompanhar o progresso na aba "Deployments"
+1. **Acesse o Railway**: https://railway.app/
+2. **Crie um novo projeto**: "New Project" > "Deploy from GitHub repo"
+3. **Adicione banco de dados PostgreSQL**:
+   - Vá para "New" > "Database" > "PostgreSQL"
+   - Aguarde a provisão do banco de dados
 
-6. **Acesse sua aplicação**
-   - Após o deploy bem-sucedido, clique em "Generate Domain" para obter uma URL pública
-   - Sua API estará disponível nessa URL
+### Passo 2: Configuração das variáveis de ambiente
 
-## Solução de problemas
+1. **No mesmo projeto, adicione a aplicação**:
+   - Clique em "New" > "GitHub Repo"
+   - Selecione seu repositório
 
-Se você encontrar problemas no build:
+2. **Configure as variáveis de ambiente**:
+   - As variáveis para PostgreSQL (`PGHOST`, `PGPORT`, etc.) são geradas automaticamente
+   - Adicione a variável `SPRING_PROFILES_ACTIVE=prod` se não estiver definida
 
-1. Verifique os logs de build no Railway
-2. Certifique-se de que o arquivo `Dockerfile` está correto
-3. Verifique se as permissões do arquivo `mvnw` estão corretas (executável)
-4. Confirme que todas as variáveis de ambiente necessárias estão configuradas
+### Passo 3: Verificação e troubleshooting
 
-## Estrutura do Projeto
+Em caso de erro "Connection to localhost:5432 refused":
 
-O projeto usa um Dockerfile multi-stage para:
-1. Construir a aplicação com Maven
-2. Criar uma imagem menor apenas com o JRE e o JAR compilado
+1. **Verifique as variáveis de ambiente**:
+   - Na sua aplicação no Railway, vá para "Variables"
+   - Confirme que as variáveis `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER` e `PGPASSWORD` estão definidas
+   - Se não estiverem, você precisará associar manualmente o banco de dados à aplicação
 
-Esta abordagem otimiza o tamanho da imagem final e melhora o tempo de deploy. 
+2. **Associe o banco de dados com a aplicação**:
+   - No Railway, vá para o dashboard do seu projeto
+   - Arraste o serviço PostgreSQL para o serviço da aplicação para ligá-los
+   - As variáveis de ambiente serão compartilhadas automaticamente
+
+3. **Reinicie o deploy**:
+   - Vá para "Deployments"
+   - Clique em "Deploy" para iniciar um novo deploy
+
+## Dicas para resolução de problemas
+
+### Problema: Erro de conexão com o banco de dados
+
+**Solução**:
+1. Verifique se o banco de dados e a aplicação estão no mesmo projeto
+2. Confirme que as variáveis de ambiente estão sendo compartilhadas
+3. Verifique o valor de `SPRING_DATASOURCE_URL` para garantir que está usando as variáveis do Railway
+4. Reinicie a aplicação após fazer alterações nas variáveis
+
+### Problema: Aplicação não inicia
+
+**Solução**:
+1. Verifique os logs no Railway para identificar a causa do erro
+2. Confirme que está usando o perfil correto (prod)
+3. Use o script `verify-env.sh` para validar as variáveis de ambiente:
+   ```
+   chmod +x verify-env.sh
+   ./verify-env.sh
+   ```
+
+Este guia atualizado aborda especificamente o problema de conexão com o banco de dados que você está enfrentando. 
