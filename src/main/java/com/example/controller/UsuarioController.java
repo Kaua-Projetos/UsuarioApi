@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import com.example.dto.SenhaDTO;
+import com.example.dto.UsuarioDTO;
 import com.example.model.Usuario;
 import com.example.repository.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +28,13 @@ public class UsuarioController {
         return repository.findAll();
     }
     @PostMapping
-    public Usuario salvarUsuario(@RequestBody Usuario usuario){
+    public Usuario salvarUsuario(@RequestBody UsuarioDTO usuarioDTO, String email) {
+        Usuario usuario = new Usuario();
+        usuario.setNome(usuarioDTO.nome());
+        usuario.setEmail(usuarioDTO.email());
+        usuario.setSenha(encoder.encode(usuarioDTO.senha()));
+        usuario.setCpf(usuarioDTO.cpf());
 
-        usuario.setSenha(encoder.encode(usuario.getSenha()));
         return repository.save(usuario);
     }
     @DeleteMapping("{id}")
@@ -43,24 +49,33 @@ public class UsuarioController {
         }
     }
     @PutMapping("{id}")
-    public void atualizarUsuario(@PathVariable("id") Long id, @RequestBody Usuario usuarioAtualizado){
+    public void atualizarUsuario(@PathVariable("id") Long id, @RequestBody UsuarioDTO usuariodto){
         Optional<Usuario> verificarUsuario = repository.findById(id);
 
         if (verificarUsuario.isPresent()){
             Usuario usuario = verificarUsuario.get();
-            usuario.setNome(usuarioAtualizado.getNome());
-            usuario.setEmail(usuarioAtualizado.getEmail());
-            usuario.setSenha(usuarioAtualizado.getSenha());
-            usuario.setCpf(usuarioAtualizado.getCpf());
-
+            usuario.setNome(usuariodto.nome());
+            usuario.setEmail(usuariodto.email());
+            usuario.setSenha(usuariodto.senha());
+            usuario.setCpf(usuariodto.cpf());
             repository.save(usuario);
         }else {
             System.out.println("Não foi possivel salvar o usuario");
         }
+    }
 
+    @PutMapping("/email/{email}")
+    public void atualizarSenha(@PathVariable("email") String email, @RequestBody SenhaDTO senhaDTO){
+        Optional<Usuario> verificarUsuarioEmail = repository.findByEmail(email);
 
+        if (verificarUsuarioEmail.isPresent()){
+            Usuario usuario = verificarUsuarioEmail.get();
 
-
+            usuario.setSenha(encoder.encode(senhaDTO.senha()));
+            repository.save(usuario);
+        }else{
+            System.out.println("Email não encontrado");
+        }
     }
 
 }

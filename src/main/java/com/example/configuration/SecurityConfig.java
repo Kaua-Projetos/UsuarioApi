@@ -1,6 +1,5 @@
 package com.example.configuration;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -25,31 +24,26 @@ import java.util.List;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(configurer -> {
-                    configurer.loginPage("/login");
-                })
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers("/login").permitAll();
                     authorize.requestMatchers("/usuario/**").hasRole("ADMIN");
                     authorize.requestMatchers("/livro").hasRole("ADMIN");
                     authorize.anyRequest().authenticated();
                 })
                 .build();
     }
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
 
-
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder){
-
+    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
         UserDetails user1 = User.builder()
                 .username("kazito")
                 .password(encoder.encode("kazito10@"))
@@ -63,13 +57,14 @@ public class SecurityConfig {
 
         return new InMemoryUserDetailsManager(user1, user2);
     }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200")); // Permitir chamadas do Angular
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true); // Permitir credenciais como cookies e headers de autenticação
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
