@@ -1,0 +1,10 @@
+.git
+.github
+.gitignore
+.idea
+target/
+!target/*.jar
+README.md
+HELP.md
+FLYIO_DEPLOY.md
+RAILWAY_SUPABASE_DEPLOY.md 
