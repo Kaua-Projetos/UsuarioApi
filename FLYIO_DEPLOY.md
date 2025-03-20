@@ -2,6 +2,12 @@
 
 Este guia vai ajudar você a fazer deploy do gerenciador de tarefas no Fly.io.
 
+## Aplicação Atual
+
+A aplicação já está implantada e disponível em:
+- https://usuarioapi.fly.dev/ ou
+- https://usuarioapi-4utlfg.fly.dev/
+
 ## Pré-requisitos
 
 1. Conta no [Fly.io](https://fly.io)
@@ -33,52 +39,31 @@ fly auth login
 cd UsuarioAPI
 ```
 
-2. Inicie o deploy:
-
-```
-fly launch --dockerfile Dockerfile
-```
-
-- Quando perguntar se quer criar um novo app, responda `Y`
-- Quando perguntar se quer usar o nome do diretório ou outro nome, escolha o nome que preferir
-- Quando perguntar sobre a região, recomendo escolher `gru` (São Paulo)
-- Quando perguntar se quer configurar PostgreSQL ou Redis, responda `N` (já temos o Supabase)
-- Quando perguntar sobre criar um banco de dados, responda `N`
-- Quando perguntar se quer fazer deploy agora, responda `Y`
-
-3. Se preferir fazer o deploy depois, configure as variáveis de ambiente para o Supabase:
-
-```
-fly secrets set DATABASE_URL="jdbc:postgresql://aws-0-sa-east-1.pooler.supabase.com:5432/postgres" DATABASE_USERNAME="postgres.azkqdfdhlzqatkakgavt" DATABASE_PASSWORD="kazito10@"
-```
-
-4. E então faça o deploy:
+2. Para fazer deploy de atualizações:
 
 ```
 fly deploy
 ```
 
-5. Após o deploy, confira o status:
+3. Para verificar o status:
 
 ```
 fly status
 ```
 
-6. Para verificar os logs:
+4. Para verificar os logs:
 
 ```
 fly logs
 ```
 
-7. Para acessar o aplicativo:
+5. Para acessar o aplicativo:
 
 ```
 fly open
 ```
 
 ## Solução de Problemas
-
-Se encontrar o erro "Could not find a Dockerfile", verifique se está no diretório correto que contém o Dockerfile. Use o comando `fly launch --dockerfile Dockerfile` para especificar explicitamente.
 
 Se o deploy falhar com erros de build, verifique os logs:
 
