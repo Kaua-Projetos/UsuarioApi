@@ -15,6 +15,7 @@ import java.util.Optional;
 @Slf4j
 @RequestMapping("usuario")
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200", "https://usuarioapi-young-brook-4416.fly.dev"})
 public class UsuarioController {
 
     @Autowired
