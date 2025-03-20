@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("livro")
+@CrossOrigin(origins = {"http://localhost:4200", "https://usuarioapi-young-brook-4416.fly.dev"})
 public class LivroController {
 
     @Autowired
