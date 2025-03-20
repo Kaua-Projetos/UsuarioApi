@@ -12,4 +12,4 @@ RUN ./mvnw package -DskipTests
 FROM eclipse-temurin:21-jre-alpine
 VOLUME /tmp
 COPY --from=build /workspace/app/target/*.jar app.jar
-ENTRYPOINT ["java","-Dspring.profiles.active=prod","-jar","/app.jar"] 
+ENTRYPOINT ["java","-Dspring.profiles.active=prod","-Dserver.address=0.0.0.0","-Dserver.port=8080","-jar","/app.jar"] 
