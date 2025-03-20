@@ -26,12 +26,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults()) // Habilita CORS
+                .csrf(AbstractHttpConfigurer::disable) // Desativa CSRF
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers("/usuario/**").hasRole("ADMIN");
-                    authorize.requestMatchers("/livro").hasRole("ADMIN");
+                    authorize.requestMatchers("/usuario/**").permitAll(); // Permite acesso sem autenticação
+                    authorize.requestMatchers("/livro").permitAll();
                     authorize.anyRequest().authenticated();
                 })
                 .build();
@@ -61,7 +61,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://usuarioapi-young-brook-4416.fly.dev"));
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:4200",
+                "https://usuarioapi-young-brook-4416.fly.dev"
+        ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
@@ -71,4 +74,3 @@ public class SecurityConfig {
         return source;
     }
 }
-
