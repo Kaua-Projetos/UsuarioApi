@@ -4,12 +4,13 @@
     "builder": "NIXPACKS",
     "watchPatterns": [
       "src/**",
-      "pom.xml"
+      "pom.xml",
+      "nixpacks.toml"
     ]
   },
   "deploy": {
     "numReplicas": 1,
-    "startCommand": "java -jar -Dspring.profiles.active=prod target/Gerenciador-de-Tarefas-0.0.1-SNAPSHOT.jar",
+    "startCommand": "./mvnw spring-boot:run -Dspring-boot.run.profiles=prod",
     "healthcheckPath": "/actuator/health",
     "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE"

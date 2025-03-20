@@ -1,9 +1,8 @@
 [phases.setup]
-nixPkgs = ['nixpkgs.jdk21_headless', 'nixpkgs.maven']
+nixPkgs = ['jdk21', 'maven']
 
 [phases.build]
-cmds = ['./mvnw clean package -DskipTests']
-dependsOn = ['setup']
+cmds = ['chmod +x mvnw', './mvnw clean package -DskipTests']
 
 [start]
-cmd = 'java -jar -Dspring.profiles.active=prod target/Gerenciador-de-Tarefas-0.0.1-SNAPSHOT.jar' 
+cmd = './mvnw spring-boot:run -Dspring-boot.run.profiles=prod' 
