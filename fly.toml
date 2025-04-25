@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for usuarioapi-young-brook-4416 on 2025-03-20T12:54:55-04:00
+# fly.toml app configuration file generated for apiusuario on 2025-04-25T17:04:37Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'usuarioapi-young-brook-4416'
+app = 'apiusuario'
 primary_region = 'gru'
 
 [build]
@@ -24,6 +24,4 @@ primary_region = 'gru'
   memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
-
-
-
+  memory_mb = 1024
