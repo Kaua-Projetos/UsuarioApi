@@ -26,11 +26,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(Customizer.withDefaults()) // Habilita CORS
-                .csrf(AbstractHttpConfigurer::disable) // Desativa CSRF
+                .cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers("/usuario/**").permitAll(); // Permite acesso sem autenticação
+                    authorize.requestMatchers("/usuario/**").permitAll();
                     authorize.requestMatchers("/livro").permitAll();
                     authorize.anyRequest().authenticated();
                 })
