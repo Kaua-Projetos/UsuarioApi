@@ -26,7 +26,7 @@ primary_region = 'gru'
   cpus = 1
   
 [checks]
-  [checks.http]
+  [[checks.http]]
     interval = "10s"
     timeout = "5s"
     grace_period = "30s"
@@ -34,4 +34,5 @@ primary_region = 'gru'
     path = "/actuator/health"
     protocol = "http"
     restart_limit = 0
+
 
